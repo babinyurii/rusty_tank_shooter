@@ -93,7 +93,51 @@ class EnemySentinelHorizontal(Enemy):
             self.moves_down = True
             
             
+
+class EnemySentinelVertical(Enemy):
+
+    def __init__(self, player, enemy_bullet_list):
+
+        super().__init__(enemy_bullet_list=enemy_bullet_list, 
+                        enemy_type="vertical_sentinel")
         
+        self.x_lim = [100, 1650] # TODO : 
+        self.y_lim = [150, 600] 
+        self.center_x = random.randint(self.x_lim[0], self.x_lim[1])
+        self.center_y = random.randint(self.y_lim[0], self.y_lim[1])
+        
+        
+        self.cur_position = 0
+        self.speed = 2
+        self.lives = 3
+        
+        # where to go
+        self.direction_up_or_down = random.choice([-1, 1])
+        self.change_y = self.speed * self.direction_up_or_down
+        
+      
+        
+        self.bullet = "vertical_sentinel_bullet"
+        
+        
+        
+        
+
+    def update(self, delta_time: float = 1 / 60):
+       self.move_vertically()
+       self.shoot_randomly(bullet_type=self.bullet, sound=self.sounds["enemy"]["enemy_horizontal_sentinel_shot.wav"])
+       
+    
+    def move_vertically(self):
+        #print("enemy left: ", self.left)
+        #print("enemy direction: ", self.direction_left_or_right)
+        if self.top > 650:
+            self.change_y *= -1
+        elif self.bottom < 0:
+            self.change_y *= -1
+        
+        self.center_y += self.change_y
+                
 
 
 class EnemyBouncer(Enemy):
@@ -132,50 +176,6 @@ class EnemyBouncer(Enemy):
        
        
 
-class EnemySentinelVertical(Enemy):
-
-    def __init__(self, player, enemy_bullet_list):
-
-        super().__init__(enemy_bullet_list=enemy_bullet_list, 
-                        enemy_type="vertical_sentinel")
-        
-        self.x_lim = [100, 1650] # TODO : 
-        self.y_lim = [150, 600] 
-        self.center_x = random.randint(self.x_lim[0], self.x_lim[1])
-        self.center_y = random.randint(self.y_lim[0], self.y_lim[1])
-        
-        
-        self.cur_position = 0
-        self.speed = 2
-        self.lives = 3
-        
-        # where to go
-        self.direction_up_or_down = random.choice([-1, 1])
-        self.change_y = self.speed * self.direction_up_or_down
-        
-      
-        
-        self.bullet = "vertical_sentinel_bullet"
-        
-        
-        
-        
-
-    def update(self, delta_time: float = 1 / 60):
-       self.move_vertically()
-       self.shoot_randomly(bullet_type=self.bullet)
-       
-    
-    def move_vertically(self):
-        #print("enemy left: ", self.left)
-        #print("enemy direction: ", self.direction_left_or_right)
-        if self.top > 650:
-            self.change_y *= -1
-        elif self.bottom < 0:
-            self.change_y *= -1
-        
-        self.center_y += self.change_y
-        
         
 
 class Ghost(Enemy):

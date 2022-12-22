@@ -1,4 +1,4 @@
-from enemy_types import EnemySentinelHorizontal
+from enemy_types import EnemySentinelHorizontal, EnemySentinelVertical
 
 LEVEL_SETUP = {
                 "level_1" : {"timer_to_next_wave" : 5,
