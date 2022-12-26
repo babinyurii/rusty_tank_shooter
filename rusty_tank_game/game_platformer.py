@@ -300,6 +300,7 @@ class Game(arcade.View):
                 
     def warm_up(self):
         
+        
         for enemy_type in self.all_enemy_types:
            enemy = enemy_type(self.player_sprite, 
                               self.scene[LAYER_ENEMY_BULLETS])
@@ -389,7 +390,7 @@ class Game(arcade.View):
         
         self.get_new_level_attrs()
         
-        
+       
         self.add_enemies()
         self.add_player()
     
@@ -729,6 +730,12 @@ class Game(arcade.View):
                     enemy.change_x *= -1
                 elif enemy.moves_left:
                     enemy.change_x *= -1
+
+
+                if enemy.moves_up:
+                    enemy.change_y *= -1
+                elif enemy.moves_down:
+                    enemy.change_y *= -1
                     
             
              # !!! TODO trying to have fun with player collision

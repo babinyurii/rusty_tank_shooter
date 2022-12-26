@@ -13,6 +13,7 @@ MAIN_PATH_SPRITES = "../resources/sprites/"
 
 
 
+
 class Enemy(arcade.Sprite):
     """
     This class represents the Enemy on our screen.
@@ -30,14 +31,15 @@ class Enemy(arcade.Sprite):
         self.hurt_textures = None
         self.cur_texture = 0
         self.cur_texture_hurt = 0
+       
         ######################################
         # loading frames
         self.textures = load_animation(anim_type="enemies", anim_obj=enemy_type)
         self.texture = self.textures[0]
         self.texture_limit = (UPDATES_PER_FRAME * len(self.textures)) - 1
         
-        self.hurt_textures = load_animation(anim_type="enemies", anim_obj="horizontal_sentinel_hurt")
-        
+        self.hurt_textures = load_animation(anim_type="enemies", anim_obj=enemy_type + "_hurt")
+        self.hurt_texture_limit = (UPDATES_PER_FRAME_HURT * len(self.hurt_textures)) - 1
     
         self.hurt = False
         self.hurt_counter  = 0
@@ -102,7 +104,32 @@ class Enemy(arcade.Sprite):
     # warmup method ends
     #############################################
 
-    
+    def get_prev_coords(self):
+        self.prev_coord_x = self.center_x
+        self.prev_coord_y = self.center_y
+        
+    def get_next_coords(self):
+        self.next_coord_x = self.center_x
+        self.next_coord_y = self.center_y
+        
+    def get_direction_along_x_and_y(self):
+        
+        if self.prev_coord_x - self.next_coord_x < 0:
+            self.moves_right = True
+            self.moves_left = False
+            
+        if self.prev_coord_x - self.next_coord_x > 0:
+            self.moves_right = False
+            self.moves_left = True
+            
+        if self.prev_coord_y - self.next_coord_y < 0:
+            self.moves_up = True
+            self.moves_down = False
+            
+        if self.prev_coord_y - self.next_coord_y > 0:
+            self.moves_up = False
+            self.moves_down = True
+                
         
         
 
@@ -117,10 +144,11 @@ class Enemy(arcade.Sprite):
             self.texture = self.textures[frame]
             self.cur_texture += 1
         else:
-            self.texture = self.hurt_textures[self.cur_texture_hurt]
+            frame = self.cur_texture_hurt // UPDATES_PER_FRAME_HURT
+            self.texture = self.hurt_textures[frame]
             self.cur_texture_hurt += 1
            
-            if self.cur_texture_hurt == 10:
+            if self.cur_texture_hurt > self.hurt_texture_limit:
                 self.hurt = False
                 self.cur_texture_hurt  = 0
 

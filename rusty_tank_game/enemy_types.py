@@ -66,32 +66,7 @@ class EnemySentinelHorizontal(Enemy):
         
         self.center_x += self.change_x
     
-    def get_prev_coords(self):
-        self.prev_coord_x = self.center_x
-        self.prev_coord_y = self.center_y
-        
-    def get_next_coords(self):
-        self.next_coord_x = self.center_x
-        self.next_coord_y = self.center_y
-        
-    def get_direction_along_x_and_y(self):
-        
-        if self.prev_coord_x - self.next_coord_x < 0:
-            self.moves_right = True
-            self.moves_left = False
-            
-        if self.prev_coord_x - self.next_coord_x > 0:
-            self.moves_right = False
-            self.moves_left = True
-            
-        if self.prev_coord_y - self.next_coord_y < 0:
-            self.moves_up = True
-            self.moves_down = False
-            
-        if self.prev_coord_y - self.next_coord_y > 0:
-            self.moves_up = False
-            self.moves_down = True
-            
+    
             
 
 class EnemySentinelVertical(Enemy):
@@ -105,26 +80,22 @@ class EnemySentinelVertical(Enemy):
         self.y_lim = [150, 600] 
         self.center_x = random.randint(self.x_lim[0], self.x_lim[1])
         self.center_y = random.randint(self.y_lim[0], self.y_lim[1])
-        
-        
         self.cur_position = 0
         self.speed = 2
         self.lives = 3
-        
         # where to go
         self.direction_up_or_down = random.choice([-1, 1])
         self.change_y = self.speed * self.direction_up_or_down
         
-      
-        
         self.bullet = "vertical_sentinel_bullet"
         
         
-        
-        
-
     def update(self, delta_time: float = 1 / 60):
+       
+       self.get_prev_coords()
        self.move_vertically()
+       self.get_next_coords()
+       self.get_direction_along_x_and_y()
        self.shoot_randomly(bullet_type=self.bullet, sound=self.sounds["enemy"]["enemy_horizontal_sentinel_shot.wav"])
        
     
